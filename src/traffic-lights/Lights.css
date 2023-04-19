@@ -1,0 +1,30 @@
+.container {
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+    background-color: black;
+    position: relative;
+    left: 40%;
+
+}
+
+.colors {
+    height: 70px;
+    width: 70px;
+    border: 1px solid white;
+    border-radius: 50%;
+    margin: 10px 0px 0px 14px;
+
+}
+
+.buttons {
+    display: flex;
+    position: relative;
+    left: 36%;
+    margin-top: 20px;
+}
+
+.button {
+    margin: 10px;
+    padding: 10px;
+}

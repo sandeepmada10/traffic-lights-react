@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <style>
+            .light {
+                margin: 16px 0px;
+                width: 100px;
+                height: 100px;
+                border-radius: 25px;
+                border: solid 1px #747272;
+                background-color: white;
+            }
+            .traffic-pole {
+                margin: 0px auto;
+                width: 188px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 400px;
+                border: solid 1px #300;
+                background-color: #333;
+            }
+            #red.active {
+                background-color: red;
+            }
+            #green.active {
+                background-color: green;
+            }
+            #orange.active {
+                background-color: orange;
+            }
+            .group-taffic-switch {
+                margin-top: 10px;
+                text-align: center;
+            }
+            .traffic-mode {
+                text-align: center;
+            }
+        </style>
+        <script>
+            let manualTimer = null;
+            let autoTimer = null;
+            function resetAllLights() {
+                document.querySelectorAll('.light').forEach((light) => light.classList.remove('active')); 
+            }
+            function handleSwitch(element) {
+                const TRAFFIC_LIGHT_SWITCH_MAP = {
+                    'ready': 'orange',
+                    'go': 'green',
+                    'stop': 'red',
+                };
+                const switchName = element.name;
+                const switchLight = TRAFFIC_LIGHT_SWITCH_MAP[switchName];
+                resetAllLights();
+                document.getElementById("orange").classList.add('active');
+                
+                manualTimer = setTimeout(function() {
+                    resetAllLights();
+                    document.getElementById(switchLight).classList.add('active');
+                }, 1000);
+            }
+            function autoMode() {
+                let signalIndex = 0;
+                const loopMap = ['ready', 'stop', 'ready', 'go'];
+                
+                const TRAFFIC_LIGHT_SWITCH_MAP = {
+                    'ready': 'orange',
+                    'go': 'green',
+                    'stop': 'red',
+                };
+                function loopSignal() {
+                    if (signalIndex === 4) {
+                        signalIndex = 0;
+                    }
+                    const switchName = loopMap[signalIndex];
+                    const switchLight = TRAFFIC_LIGHT_SWITCH_MAP[switchName];
+                    resetAllLights();
+                    document.getElementById(switchLight).classList.add('active');
+                    autoTimer = setTimeout(loopSignal, 1000);
+                    signalIndex = signalIndex + 1;
+                }
+                loopSignal();
+            }
+            function trafficModeSwitch(mode) {
+                clearTimeout(manualTimer);
+                clearTimeout(autoTimer);
+    
+                if (mode === "manual") {
+                    document.querySelector('.group-taffic-switch').style.display = 'block';
+                    manualMode();
+                } else if (mode === "auto") {
+                    document.querySelector('.group-taffic-switch').style.display = 'none';
+                    autoMode();
+                }
+            }
+            function handleTrafficModeSwitch(element) {
+                trafficModeSwitch(element.value);
+            }
+        </script>
+    </head>
+    <body>
+        <div class="traffic-pole">
+            <div id="red" class="light"></div>
+            <div id="green" class="light"></div>
+            <div id="orange" class="light"></div>
+        </div>
+        <div class="traffic-mode">
+            <input checked type="radio" id="manual" name="traffic-mode" value="manual" onclick="handleTrafficModeSwitch(this)">
+            <label for="manual">Manual</label><br>
+            <input type="radio" id="auto" name="traffic-mode" value="auto" onclick="handleTrafficModeSwitch(this)">
+            <label for="auto">Auto</label><br>
+        </div>
+        <div class="group-taffic-switch">
+            <button name="stop" onclick="handleSwitch(this)">Stop</button>
+            <button name="go" onclick="handleSwitch(this)">Go</button>
+            <!-- <button name="ready" onclick="handleSwitch(this)">Ready</button> -->
+        </div>
+    </body>
+</html>
